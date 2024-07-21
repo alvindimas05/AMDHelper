@@ -1,36 +1,25 @@
 import Chromium from "./chromium.ts";
-
-const chromiumBrowsers = ["Google Chrome", "Arc", "Microsoft Edge"];
-const amdfriends = ["Adobe Photoshop", "CorelDRAW"];
+import Amdfriend from "./amdfriend.ts";
+import AppPatch from "./apppatch.ts";
 
 export default class App {
+    path: string;
     name: string;
-    chromium: Chromium | null = null;
-    constructor(name: string) {
-        this.name = name;
-        this.checkChromium();
+    appPatches: AppPatch[] = [];
+    constructor(path: string) {
+        this.path = path;
+        this.name = path.split("/").pop()!.replace(/.app/g, '');
+
+        this.appPatches = [
+            new Chromium(this.path),
+            new Amdfriend(this.path),
+        ];
     }
-    checkChromium(){
-        this.chromium = new Chromium(this.name);
-        if(this.chromium.supported()) return;
-        this.chromium = null;
-    }
-    patch(){
-        if(this.chromium != null){
-            this.chromium.patch();
-            return;
-        }
-    }
-    supported(): boolean {
-        return this.chromiumSupported() || this.amdfriendSupported();
-    }
-    chromiumSupported = () => chromiumBrowsers.includes(this.name);
-    amdfriendSupported = () => amdfriends.some(v => v.includes(this.name));
-    patched(): number {
-        if(this.chromium != null && this.chromium.patched()){
-            return 1;
-        } else if(this.amdfriendSupported()){
-            return 0;
+    patch = async () => this.appPatches.forEach(patch => patch.supported() && patch.patch());
+    supported = () => this.appPatches.some(patch => patch.supported());
+    patched = () => {
+        for(const pch of this.appPatches){
+            if(pch.supported()) return pch.patched();
         }
         return -1;
     }

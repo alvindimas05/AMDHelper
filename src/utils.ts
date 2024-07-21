@@ -1,0 +1,1 @@
+export const isRoot = () => process.getuid() === 0 ;

@@ -9,7 +9,7 @@
     "typescript": "^5.0.0"
   },
   "dependencies": {
-    "amdfriend": "^1.0.2",
+    "amdfriend": "git+https://github.com/NyaomiDEV/AMDFriend.git",
     "chalk": "^5.3.0",
     "console-clear": "^1.1.1",
     "inquirer": "^10.0.4"
