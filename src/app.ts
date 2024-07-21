@@ -1,6 +1,7 @@
 import Chromium from "./chromium.ts";
 
 const chromiumBrowsers = ["Google Chrome", "Arc", "Microsoft Edge"];
+const amdfriends = ["Adobe Photoshop", "CorelDRAW"];
 
 export default class App {
     name: string;
@@ -21,9 +22,16 @@ export default class App {
         }
     }
     supported(): boolean {
-        return chromiumBrowsers.includes(this.name);
+        return this.chromiumSupported() || this.amdfriendSupported();
     }
-    patched(): boolean {
-        return this.chromium != null && this.chromium.patched();
+    chromiumSupported = () => chromiumBrowsers.includes(this.name);
+    amdfriendSupported = () => amdfriends.some(v => v.includes(this.name));
+    patched(): number {
+        if(this.chromium != null && this.chromium.patched()){
+            return 1;
+        } else if(this.amdfriendSupported()){
+            return 0;
+        }
+        return -1;
     }
 }

@@ -7,7 +7,6 @@ import clear from "console-clear";
 export default class CommandLine {
     supportedApps: App[];
     async start(){
-        clear();
         this.getSupportedApplication();
 
         console.log(`${chalk.red("AMD")}Helper\n`);
@@ -23,13 +22,20 @@ export default class CommandLine {
     }
     selectOption(value: string){
         clear();
-
         value = value.toLowerCase();
-        if(value == "q"){
-            console.log("Bye!");
-            process.exit();
-        } else if(value == "a"){
-            this.patchAllApps()
+        switch(value) {
+            case "q":
+                console.log("Bye!");
+                process.exit();
+                break;
+            case "a":
+                this.patchAllApps();
+                break;
+            default:
+                const val = parseInt(value);
+                if(!isNaN(val) && val <= this.supportedApps.length + 1 && val > 0)
+                    this.supportedApps[val-1].patch()
+
         }
 
         const cli = new CommandLine();
@@ -40,7 +46,18 @@ export default class CommandLine {
     }
     logSupportedApps(){
         this.supportedApps.forEach((app, i) => {
-            console.log(`${i + 1}. ${app.name} [${app.patched() ? chalk.green("PATCHED") : chalk.red("NOT PATCHED")}]`)
+            let status: string;
+            switch(app.patched()){
+                case 1:
+                    status = chalk.green("PATCHED");
+                    break;
+                case -1:
+                    status = chalk.red("NOT PATCHED");
+                    break;
+                default:
+                    status = chalk.yellow("UNDETECTED");
+            }
+            console.log(`${i + 1}. ${app.name} [${status}]`)
         })
     }
     getSupportedApplication(){
