@@ -1,15 +1,34 @@
 # AMDHelper
 
-To install dependencies:
+AMDHelper is an app to help patch unsupported apps on AMD Hackintoshes.
+This app patches app that use OpenGL and Intel MKL libraries.
+This program is experimental and might not fix all of your unsupported apps.
 
-```bash
-bun install
+### How this works?
+- For apps that uses Intel MKL libraries, it used the [AMDFriend](https://github.com/NyaomiDEV/AMDFriend) to patch.
+
+- For apps that uses OpenGL... Sorry to say this, but it's just disabling the GPU features
+from the apps. Our only option is to wait for NootedRed to fix this issue.
+
+### How to use?
+
+Install [Homebrew](https://brew.sh/) and Node.js
+```
+brew install nodejs
 ```
 
-To run:
-
-```bash
-bun run index.ts
+Install AMDHelper on your system 
+```
+npm install -g git+https://github.com/alvindimas05/AMDHelper.git
 ```
 
-This project was created using `bun init` in bun v1.1.17. [Bun](https://bun.sh) is a fast all-in-one JavaScript runtime.
+Run AMDHelper (Please run as sudo)
+```
+sudo amdhelper
+```
+
+## Credits
+- [VisualEhrmanntraut](https://github.com/VisualEhrmanntraut) for developing [NootedRed](https://github.com/ChefKissInc/NootedRed)
+to support Hackintosh on AMD iGPU.
+- [NyaomiDEV](https://github.com/NyaomiDEV) for developing [AMDFriend](https://github.com/NyaomiDEV/AMDFriend)
+to be able patch apps that uses Intel MKL libraries.

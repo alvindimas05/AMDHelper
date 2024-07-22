@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 import { promisify } from "util";
 import child_process from "child_process";
 import CommandLine from "./src/commandline.ts";
