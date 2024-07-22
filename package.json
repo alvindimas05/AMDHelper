@@ -1,12 +1,21 @@
 {
   "name": "amdhelper",
   "module": "index.ts",
-  "type": "module",
+  "type": "commonjs",
+  "scripts": {
+    "clean": "rimraf build",
+    "dev": "bun run index.ts",
+    "build": "bun run clean && webpack && bash build.sh"
+  },
   "devDependencies": {
-    "@types/bun": "latest"
+    "@types/bun": "latest",
+    "@types/node": "^20.14.11",
+    "ts-loader": "^9.5.1",
+    "webpack": "^5.93.0",
+    "webpack-cli": "^5.1.4"
   },
   "peerDependencies": {
-    "typescript": "^5.0.0"
+    "typescript": "^5.5.3"
   },
   "dependencies": {
     "amdfriend": "git+https://github.com/NyaomiDEV/AMDFriend.git",

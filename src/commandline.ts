@@ -1,16 +1,19 @@
 import fs from "fs";
 import chalk from "chalk";
-import App from "./app.ts";
+import App from "./app";
 import inquirer from "inquirer";
+// @ts-ignore
 import clear from "console-clear";
-import path from "node:path";
+import path from "path";
 
 export default class CommandLine {
     basePath = "/Applications/";
+    // @ts-ignore
     supportedApps: App[];
     async start(){
         this.getSupportedApplication();
 
+        // @ts-ignore
         console.log(`${chalk.red("AMD")}Helper\n`);
         console.log(`Applications that can be patched:`)
         this.logSupportedApps();
@@ -18,6 +21,7 @@ export default class CommandLine {
         console.log("(A) Patch all apps")
         console.log("(Q) Quit")
 
+        // @ts-ignore
         const answers = await inquirer.prompt([{ type: "input", name: "option", message: "Select option: " }]);
 
         this.selectOption(answers.option);
@@ -51,11 +55,14 @@ export default class CommandLine {
             let status: string;
             switch(app.patched()){
                 case 1:
+                    // @ts-ignore
                     status = chalk.green("PATCHED");
                     break;
                 case 0:
+                    // @ts-ignore
                     status = chalk.red("NOT PATCHED");
                     break;
+                // @ts-ignore
                 default: status = chalk.yellow("UNDETECTED");
             }
 

@@ -1,1 +1,2 @@
-export const isRoot = () => process.getuid() === 0 ;
+// @ts-ignore
+export const isRoot = () => process!.getuid() === 0 ;

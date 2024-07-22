@@ -1,11 +1,11 @@
 import fs from "fs";
-import {parallelizer} from "amdfriend/src/parallelizer.ts";
+import {parallelizer} from "amdfriend/src/parallelizer";
 import {cpus} from "os";
-import {walkDirectory} from "amdfriend/src/utils.ts";
+import {walkDirectory} from "amdfriend/src/utils";
 import path, {resolve} from "path";
-import type {PatchOptions} from "amdfriend/src/types.ts";
+import type {PatchOptions} from "amdfriend/src/types";
 import {patchFile} from "amdfriend/src";
-import {isRoot} from "./utils.ts";
+import {isRoot} from "./utils";
 import AppPatch from "./apppatch";
 
 

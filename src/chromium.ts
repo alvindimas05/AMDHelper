@@ -1,7 +1,7 @@
-import path from "node:path";
-import os from "node:os";
+import path from "path";
+import os from "os";
 import fs from "fs";
-import AppPatch from "./apppatch.ts";
+import AppPatch from "./apppatch";
 
 interface ChromiumConfig {
     browser?: {
@@ -14,6 +14,7 @@ const chromiumBrowsers = ["Chromium", "Google Chrome", "Arc", "Microsoft Edge", 
 export default class Chromium extends AppPatch {
     configPath: string | null = null;
     patchValue = "enable-gpu-rasterization@2";
+    // @ts-ignore
     config: ChromiumConfig;
     constructor(appPath: string) {
         super(appPath);
@@ -41,6 +42,7 @@ export default class Chromium extends AppPatch {
         this.configPath = null;
     }
     setConfig(){
+        // @ts-ignore
         this.config = JSON.parse(fs.readFileSync(this.configPath));
     }
     supported() {

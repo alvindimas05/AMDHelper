@@ -1,6 +1,6 @@
-import Chromium from "./chromium.ts";
-import Amdfriend from "./amdfriend.ts";
-import AppPatch from "./apppatch.ts";
+import Chromium from "./chromium";
+import Amdfriend from "./amdfriend";
+import AppPatch from "./apppatch";
 
 export default class App {
     path: string;
