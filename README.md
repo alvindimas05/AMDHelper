@@ -17,9 +17,9 @@ Install [Homebrew](https://brew.sh/) and Node.js
 brew install nodejs
 ```
 
-Install AMDHelper on your system 
+Install (or update) AMDHelper on your system 
 ```
-npm install -g git+https://github.com/alvindimas05/AMDHelper.git
+bash <(curl -sL https://raw.githubusercontent.com/alvindimas05/AMDHelper/main/install.sh)
 ```
 
 Run AMDHelper (Please run as sudo)
