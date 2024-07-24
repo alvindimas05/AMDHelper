@@ -1,0 +1,20 @@
+import {exec} from "./utils";
+
+interface UpdateResponse {
+    tag_name: string
+}
+
+export async function check_update(){
+    const res = await fetch(process.env.RELEASE_URL);
+    const data : UpdateResponse[] = await res.json();
+    if(data[0].tag_name === process.env.VERSION) return;
+    console.log(`New update version ${data[0].tag_name}! Run "amdhelper -u" to update.`);
+}
+
+export async function update(){
+    const curl = await exec(`curl -sL ${process.env.INSTALL_URL}`);
+    for(let cmd of curl.stdout.split("\n")){
+        const { stdout } = await exec(cmd);
+        if(stdout != "") console.log(`${stdout.slice(0, -1)}`);
+    }
+}

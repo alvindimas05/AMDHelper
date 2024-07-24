@@ -14,7 +14,7 @@ from the apps. Our only option is to wait for NootedRed to fix this issue.
 
 Install (or update) AMDHelper on your system 
 ```
-bash <(curl -sL https://raw.githubusercontent.com/alvindimas05/AMDHelper/main/install.sh)
+curl -sL https://raw.githubusercontent.com/alvindimas05/AMDHelper/main/install.sh | bash
 ```
 
 Run AMDHelper (Please run as sudo)
