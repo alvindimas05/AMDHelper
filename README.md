@@ -12,11 +12,6 @@ from the apps. Our only option is to wait for NootedRed to fix this issue.
 
 ### How to use?
 
-Install [Homebrew](https://brew.sh/) and Node.js
-```
-brew install nodejs
-```
-
 Install (or update) AMDHelper on your system 
 ```
 bash <(curl -sL https://raw.githubusercontent.com/alvindimas05/AMDHelper/main/install.sh)
