@@ -8,7 +8,6 @@ import {patchFile} from "amdfriend/src";
 import {isRoot} from "./utils";
 import AppPatch from "./apppatch";
 
-
 const amdfriends = ["Adobe Photoshop", "CorelDRAW"];
 const patchOptions: PatchOptions = {backup: false, clearXA: false, dryRun: false, inPlace: true, sign: true };
 
