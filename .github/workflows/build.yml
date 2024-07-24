@@ -25,7 +25,7 @@ jobs:
         if: ${{ github.event_name == 'workflow_dispatch' }}
         uses: ncipollo/release-action@v1
         with:
-          artifacts: ./src/build/AMDHelper
+          artifacts: ./build/AMDHelper
           tag: ${{ inputs.tag }}
           name: AMDHelper ${{ inputs.tag }}
           allowUpdates: true
