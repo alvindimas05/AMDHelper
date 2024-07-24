@@ -19,6 +19,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: oven-sh/setup-bun@v2
+      - run: bun i -g webpack webpack-cli
       - run: bun run build
       - name: Publish release
         if: ${{ github.event_name == 'workflow_dispatch' }}
