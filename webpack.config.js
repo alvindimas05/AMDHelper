@@ -1,11 +1,11 @@
 const path = require('path');
-
-require("dotenv").configDotenv();
+const Dotenv = require('dotenv-webpack');
 
 module.exports =  {
     target: "node",
     entry: "./index.ts",
     mode: "production",
+    plugins: [new Dotenv()],
     output: {
         filename: 'bundle.js',
         path: path.resolve(__dirname, 'build'),
