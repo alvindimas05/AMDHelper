@@ -1,5 +1,7 @@
 const path = require('path');
 
+require("dotenv").configDotenv();
+
 module.exports =  {
     target: "node",
     entry: "./index.ts",
