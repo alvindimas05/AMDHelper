@@ -1,6 +1,6 @@
 import fs from "fs";
 import chalk from "chalk";
-import App from "./app";
+import App from "@src/app";
 import inquirer from "inquirer";
 // @ts-ignore
 import clear from "console-clear";

@@ -1,7 +1,7 @@
 import dotenv from "dotenv";
-import CommandLine from "./src/commandline";
-import {isRoot,exec} from "./src/utils";
-import {check_update, update} from "./src/update";
+import CommandLine from "@src/commandline";
+import {isRoot,exec} from "@src/utils";
+import {check_update, update} from "@src/update";
 import yargs from "yargs";
 import { hideBin } from "yargs/helpers";
 

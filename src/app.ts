@@ -1,6 +1,7 @@
-import Chromium from "./chromium";
-import Amdfriend from "./amdfriend";
-import AppPatch from "./apppatch";
+import Chromium from "@patches/chromium";
+import Amdfriend from "@patches/amdfriend";
+import AppPatch from "@patches/apppatch";
+import Discord from "@patches/discord";
 
 export default class App {
     path: string;
@@ -11,8 +12,9 @@ export default class App {
         this.name = path.split("/").pop()!.replace(/.app/g, '');
 
         this.appPatches = [
-            new Chromium(this.path),
-            new Amdfriend(this.path),
+            new Chromium(path),
+            new Amdfriend(path),
+            new Discord(path),
         ];
     }
     patch = async () => this.appPatches.forEach(patch => patch.supported() && patch.patch());

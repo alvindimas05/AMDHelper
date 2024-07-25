@@ -3,9 +3,9 @@
   "module": "index.ts",
   "type": "commonjs",
   "scripts": {
-    "clean": "bunx rimraf build",
+    "clean": "rimraf build",
     "dev": "bun run index.ts",
-    "compile": "bunx webpack",
+    "compile": "webpack",
     "build": "bun run clean && bun run compile && bash build.sh"
   },
   "devDependencies": {

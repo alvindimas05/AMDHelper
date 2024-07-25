@@ -1,7 +1,7 @@
 import path from "path";
 import os from "os";
 import fs from "fs";
-import AppPatch from "./apppatch";
+import AppPatch from "@patches/apppatch";
 
 interface ChromiumConfig {
     browser?: {

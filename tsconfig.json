@@ -5,6 +5,7 @@
     "module": "commonjs",
     "moduleDetection": "force",
     "allowJs": false,
+    "baseUrl": "./",
 
     "allowImportingTsExtensions": false,
     "verbatimModuleSyntax": false,
@@ -15,6 +16,11 @@
     "noImplicitAny": false,
     "forceConsistentCasingInFileNames": true,
     "esModuleInterop": true,
+
+    "paths": {
+      "@src/*": ["src/*"],
+      "@patches/*": ["src/patches/*"]
+    }
   },
   "ts-loader": {
     "allowTsInNodeModules": true

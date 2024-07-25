@@ -5,11 +5,10 @@ import {walkDirectory} from "amdfriend/src/utils";
 import path, {resolve} from "path";
 import type {PatchOptions} from "amdfriend/src/types";
 import {patchFile} from "amdfriend/src";
-import {isRoot} from "./utils";
-import AppPatch from "./apppatch";
+import {isRoot, patchOptions} from "@src/utils";
+import AppPatch from "@patches/apppatch";
 
 const amdfriends = ["Adobe Photoshop", "CorelDRAW"];
-const patchOptions: PatchOptions = {backup: false, clearXA: false, dryRun: false, inPlace: true, sign: true };
 
 export default class Amdfriend extends AppPatch {
     patchedPath: string;
@@ -17,7 +16,7 @@ export default class Amdfriend extends AppPatch {
         super(appPath);
         this.patchedPath = path.join(this.appPath, "Contents", ".amdhelper");
     }
-    patched(): number {
+    patched() {
         const fileExists = fs.existsSync(this.patchedPath);
         if(!isRoot() && !fileExists) return -1;
         return (fileExists ? 1 : 0);

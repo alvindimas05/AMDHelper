@@ -1,4 +1,4 @@
-import {exec} from "./utils";
+import {exec} from "@src/utils";
 
 interface UpdateResponse {
     tag_name: string

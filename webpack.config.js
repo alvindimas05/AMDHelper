@@ -19,7 +19,9 @@ module.exports =  {
     resolve: {
         extensions: ['.js', '.ts'],
         alias: {
-            "amdfriend/src": "amdfriend/dist"
+            "amdfriend/src": "amdfriend/dist",
+            "@src": path.resolve(__dirname, "src"),
+            "@patches": path.resolve(__dirname, "src", "patches"),
         }
     },
 };
