@@ -5,13 +5,15 @@
   "scripts": {
     "clean": "rimraf build",
     "dev": "bun run index.ts",
-    "compile": "webpack",
-    "build": "bun run clean && bun run compile && bash build.sh"
+    "bundle": "webpack",
+    "compile": "nexe build/bundle.js -o build/amdhelper --remote https://github.com/alvindimas05/nexe-assets/releases/download/v0.0.1",
+    "build": "bun run clean && bun run bundle && bun run compile"
   },
   "devDependencies": {
     "@types/bun": "latest",
     "@types/node": "^20.14.11",
     "@types/yargs": "^17.0.32",
+    "nexe": "^4.0.0-rc.6",
     "rimraf": "^6.0.1",
     "ts-loader": "^9.5.1",
     "webpack": "^5.93.0",
