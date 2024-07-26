@@ -25,5 +25,7 @@ sudo amdhelper
 ## Credits
 - [VisualEhrmanntraut](https://github.com/VisualEhrmanntraut) for developing [NootedRed](https://github.com/ChefKissInc/NootedRed)
 to support Hackintosh on AMD iGPU.
+- [tomnic](https://macos86.it/profile/69-tomnic/) for [guide](https://macos86.it/topic/5489-tutorial-for-patching-binaries-for-amd-hackintosh-compatibility/)
+to patch apps that uses Intel MKL libraries.
 - [NyaomiDEV](https://github.com/NyaomiDEV) for developing [AMDFriend](https://github.com/NyaomiDEV/AMDFriend)
-to be able patch apps that uses Intel MKL libraries.
+to automatically patch apps that uses Intel MKL libraries.
