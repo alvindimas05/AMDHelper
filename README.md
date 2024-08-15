@@ -29,3 +29,5 @@ to support Hackintosh on AMD iGPU.
 to patch apps that uses Intel MKL libraries.
 - [NyaomiDEV](https://github.com/NyaomiDEV) for developing [AMDFriend](https://github.com/NyaomiDEV/AMDFriend)
 to automatically patch apps that uses Intel MKL libraries.
+- [gmatht](https://github.com/gmatht) for script code [gz99](https://github.com/gmatht/joshell/blob/master/scripts/gz99)
+script for better compression.

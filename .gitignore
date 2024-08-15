@@ -167,3 +167,5 @@ dist
 .DS_Store
 
 build
+amdhelper.gz
+amdhelper.gz.new
