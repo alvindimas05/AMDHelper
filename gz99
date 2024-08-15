@@ -14,16 +14,13 @@ fi
 
 OUT=$1
 
-myhash(){
-	sha256sum $@ | sed s/\ .*//
-}
 
 time gzip -9 > $OUT.new
 mv $OUT.new $OUT
-ORIG_HASH=`gunzip < $OUT|myhash`
+ORIG_HASH=`gunzip < $OUT`
 
 accept_new(){
-if [ ".`gunzip < $OUT.new|myhash`" = ".$ORIG_HASH" ]
+if [ ".`gunzip < $OUT.new`" = ".$ORIG_HASH" ]
 then
 	oldsize=$(stat -f%z "$OUT")
 	newsize=$(stat -f%z "$OUT.new")
