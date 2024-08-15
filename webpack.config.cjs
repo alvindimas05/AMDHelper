@@ -5,7 +5,9 @@ module.exports =  {
     target: "node",
     entry: "./index.ts",
     mode: "production",
-    plugins: [new Dotenv()],
+    plugins: [
+        new Dotenv(),
+    ],
     output: {
         filename: 'bundle.js',
         path: path.resolve(__dirname, 'build'),
@@ -13,8 +15,9 @@ module.exports =  {
     module: {
         rules: [
             {
-                test: /\.ts?$/,
-                loader: 'ts-loader'
+                test: /\.(js|jsx|tsx|ts)$/,
+                exclude: /node_modules/,
+                loader: 'babel-loader'
             }
         ]
     },
