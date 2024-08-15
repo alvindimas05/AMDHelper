@@ -20,13 +20,13 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: '20.11.0'
-      - name: Set up Homebrew
-        uses: Homebrew/actions/setup-homebrew@master
+          node-version: '18.19.0'
+#      - name: Set up Homebrew
+#        uses: Homebrew/actions/setup-homebrew@master
       - name: Install Bun
         uses: oven-sh/setup-bun@v2
-      - name: Install Brew dependencies
-        run: brew install p7zip coreutils
+#      - name: Install Brew dependencies
+#        run: brew install p7zip coreutils
       - name: Build and Install
         run: |
           bun i
