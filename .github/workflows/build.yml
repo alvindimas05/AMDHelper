@@ -33,6 +33,7 @@ jobs:
           bun run build
       - name: Compress executable
         run: |
+          chmod +x ./gz99
           cp build/amdhelper .
           tar c ./amdhelper | ./gz99 amdhelper.gz
       - name: Publish release
