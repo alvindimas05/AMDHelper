@@ -26,7 +26,7 @@ jobs:
       - name: Install Bun
         uses: oven-sh/setup-bun@v2
       - name: Install Brew dependencies
-        uses: brew install p7zip coreutils
+        run: brew install p7zip coreutils
       - name: Build and Install
         run: |
           bun i
