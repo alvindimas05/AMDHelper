@@ -14,6 +14,7 @@ export async function check_update(){
 export async function update(){
     const curl = await exec(`curl -sL ${process.env.INSTALL_URL}`);
     for(let cmd of curl.stdout.split("\n")){
+        if(cmd.length === 0) return;
         const { stdout } = await exec(cmd);
         if(stdout != "") console.log(`${stdout.slice(0, -1)}`);
     }
