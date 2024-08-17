@@ -1,3 +1,5 @@
+import fs from "fs";
+
 type Patched = 1 | 0 | -1;
 
 export default class AppPatch {
@@ -15,5 +17,10 @@ export default class AppPatch {
     }
     supported(): boolean {
         throw new Error(`Method "supported" must be implemented on class ${this.constructor.name}`);
+    }
+    pathExists(path: string): boolean {
+        if(fs.existsSync(path)) return true;
+        console.log("Found Discord app but can't find discord data! Please open the discord first before install.");
+        return false;
     }
 }

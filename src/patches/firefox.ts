@@ -9,11 +9,14 @@ export default class Firefox extends AppPatch {
     prefPath: string
     constructor(appName: string) {
         super(appName);
-        fs.readdirSync(firefoxPath).forEach(dir => {
-            if(dir.endsWith(".default-release")){
-                this.prefPath = path.join(firefoxPath, dir, "prefs.js");
-            }
-        });
+
+        if(this.pathExists(firefoxPath)){
+            fs.readdirSync(firefoxPath).forEach(dir => {
+                if(dir.endsWith(".default-release")){
+                    this.prefPath = path.join(firefoxPath, dir, "prefs.js");
+                }
+            });
+        }
     }
     supported(): boolean {
         return this.appName === "Firefox";

@@ -11,13 +11,16 @@ export default class Discord extends AppPatch {
     krispPath: string;
     constructor(appPath: string) {
         super(appPath);
-        this.krispPath = path.join(
-            discordPath,
-            fs.readdirSync(discordPath)
-                .filter(a => a != ".DS_Store")
-                .sort((a, b) => a.localeCompare(b))[0]
-            , "modules", "discord_krisp", "discord_krisp.node");
-        this.patchedPath = path.join(this.krispPath, "..", ".amdhelper");
+
+        if(this.pathExists(discordPath)){
+            this.krispPath = path.join(
+                discordPath,
+                fs.readdirSync(discordPath)
+                    .filter(a => a != ".DS_Store")
+                    .sort((a, b) => a.localeCompare(b))[0]
+                , "modules", "discord_krisp", "discord_krisp.node");
+            this.patchedPath = path.join(this.krispPath, "..", ".amdhelper");
+        }
     }
     patched() {
         const fileExists = fs.existsSync(this.patchedPath);
