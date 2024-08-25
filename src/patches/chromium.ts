@@ -2,6 +2,7 @@ import path from "path";
 import os from "os";
 import fs from "fs";
 import AppPatch from "@patches/apppatch";
+import {PatchType} from "@src/types";
 
 interface ChromiumConfig {
     browser?: {
@@ -51,7 +52,8 @@ export default class Chromium extends AppPatch {
     patched() {
         return (this.config.browser !== undefined &&
             this.config.browser.enabled_labs_experiments !== undefined &&
-            this.config.browser.enabled_labs_experiments.includes(this.patchValue)) ? 1 : 0;
+            this.config.browser.enabled_labs_experiments.includes(this.patchValue)) ?
+            PatchType.PATCHED : PatchType.UNPATCHED;
     }
     patch(){
         if(this.configPath == undefined || this.config == undefined){

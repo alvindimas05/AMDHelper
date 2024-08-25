@@ -2,18 +2,24 @@ import AppPatch from "@patches/apppatch";
 import path from "path";
 import {homedir} from "os";
 import fs from "fs";
+import {PatchType} from "@src/types";
 
 const firefoxPath = path.join(homedir(), "Library", "Application Support", "Firefox", "Profiles")
 const patchCode = "user_pref(\"layers.acceleration.disabled\", true);"
 export default class Firefox extends AppPatch {
+    firefoxPath: string
     prefPath: string
     constructor(appName: string) {
         super(appName);
 
-        if(this.pathExists(firefoxPath)){
-            fs.readdirSync(firefoxPath).forEach(dir => {
-                if(dir.endsWith(".default-release")){
-                    this.prefPath = path.join(firefoxPath, dir, "prefs.js");
+        this.firefoxPath = firefoxPath;
+        this.setPrefPath(".default-release")
+    }
+    setPrefPath(dirname: string){
+        if(this.pathExists(this.firefoxPath)){
+            fs.readdirSync(this.firefoxPath).forEach(dir => {
+                if(dir.endsWith(dirname)){
+                    this.prefPath = path.join(this.firefoxPath, dir, "prefs.js");
                 }
             });
         }
@@ -23,10 +29,10 @@ export default class Firefox extends AppPatch {
     }
     patched() {
         let pref = fs.readFileSync(this.prefPath, "utf8");
-        return pref.includes("user_pref(\"layers.acceleration.disabled\", true);") ? 1 : 0;
+        return pref.includes("user_pref(\"layers.acceleration.disabled\", true);") ? PatchType.PATCHED : PatchType.UNPATCHED;
     }
     patch() {
-        if(this.patched() === 1) return console.log(`${this.appName} already patched. Ignoring...`);
+        if(this.patched() === PatchType.PATCHED) return console.log(`${this.appName} already patched. Ignoring...`);
         let pref = fs.readFileSync(this.prefPath, "utf8");
         pref += "\n" + patchCode;
         fs.writeFileSync(this.prefPath, pref);

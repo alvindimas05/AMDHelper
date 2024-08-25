@@ -7,6 +7,7 @@ import type {PatchOptions} from "amdfriend/src/types";
 import {patchFile} from "amdfriend/src";
 import {isRoot, patchOptions} from "@src/utils";
 import AppPatch from "@patches/apppatch";
+import {PatchType} from "@src/types";
 
 const amdfriends = ["Adobe Photoshop", "CorelDRAW"];
 
@@ -18,14 +19,14 @@ export default class Amdfriend extends AppPatch {
     }
     patched() {
         const fileExists = fs.existsSync(this.patchedPath);
-        if(!isRoot() && !fileExists) return -1;
-        return (fileExists ? 1 : 0);
+        if(!isRoot() && !fileExists) return PatchType.UNDETECTED;
+        return (fileExists ? PatchType.PATCHED : PatchType.UNPATCHED);
     }
     supported(){
         return amdfriends.some(v => this.appName.includes(v) || v.includes(this.appName));
     }
     async patch(){
-        if(this.patched() === 1) return console.log(`${this.appName} already patched. Ignoring...`);
+        if(this.patched() === PatchType.PATCHED) return console.log(`${this.appName} already patched. Ignoring...`);
         await parallelizer(this.patchDirectories(), cpus().length);
 
         if(!isRoot()) fs.writeFileSync(this.patchedPath, "");

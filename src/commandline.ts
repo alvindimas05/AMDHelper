@@ -5,6 +5,8 @@ import inquirer from "inquirer";
 // @ts-ignore
 import clear from "console-clear";
 import path from "path";
+import {PatchType} from "@src/types";
+
 
 export default class CommandLine {
     basePath = "/Applications/";
@@ -53,12 +55,13 @@ export default class CommandLine {
     logSupportedApps(){
         this.supportedApps.forEach((app, i) => {
             let status: string;
+
             switch(app.patched()){
-                case 1:
+                case PatchType.PATCHED:
                     // @ts-ignore
                     status = chalk.green("PATCHED");
                     break;
-                case 0:
+                case PatchType.UNPATCHED:
                     // @ts-ignore
                     status = chalk.red("NOT PATCHED");
                     break;

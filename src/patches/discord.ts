@@ -4,6 +4,7 @@ import {homedir} from "os";
 import {isRoot, patchOptions, searchFile} from "@src/utils";
 import fs from "fs";
 import {patchFile} from "amdfriend/src";
+import {PatchType} from "@src/types";
 
 const discordPath = path.join(homedir(), "Library", "Application Support", "discord")
 export default class Discord extends AppPatch {
@@ -24,7 +25,7 @@ export default class Discord extends AppPatch {
     }
     patched() {
         const fileExists = fs.existsSync(this.patchedPath);
-        return (fileExists ? 1 : 0);
+        return (fileExists ? PatchType.PATCHED : PatchType.UNPATCHED);
     }
     supported(): boolean {
         return this.appName === "Discord";
