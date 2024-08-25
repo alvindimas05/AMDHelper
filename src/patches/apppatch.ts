@@ -11,7 +11,7 @@ export default class AppPatch {
     patched(): PatchType {
         throw new Error(`Method "patched" must be implemented on class ${this.constructor.name}`);
     }
-    patch() {
+    async patch() {
         throw new Error(`Method "patch" must be implemented on class ${this.constructor.name}`);
     }
     supported(): boolean {

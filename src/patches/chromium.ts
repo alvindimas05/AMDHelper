@@ -55,7 +55,7 @@ export default class Chromium extends AppPatch {
             this.config.browser.enabled_labs_experiments.includes(this.patchValue)) ?
             PatchType.PATCHED : PatchType.UNPATCHED;
     }
-    patch(){
+    async patch(){
         if(this.configPath == undefined || this.config == undefined){
             console.error(`Can't apply patch to ${this.appName}! Config not found.`)
             return;

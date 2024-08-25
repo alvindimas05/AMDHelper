@@ -26,7 +26,7 @@ export default class CommandLine {
         // @ts-ignore
         const answers = await inquirer.prompt([{ type: "input", name: "option", message: "Select option: " }]);
 
-        this.selectOption(answers.option);
+        await this.selectOption(answers.option);
     }
     async selectOption(value: string){
         clear();
@@ -37,7 +37,7 @@ export default class CommandLine {
                 process.exit();
                 break;
             case "a":
-                this.patchAllApps();
+                await this.patchAllApps();
                 break;
             default:
                 const val = parseInt(value);
@@ -49,8 +49,10 @@ export default class CommandLine {
         const cli = new CommandLine();
         await cli.start();
     }
-    patchAllApps(){
-        this.supportedApps.forEach(app => app.patch());
+    async patchAllApps(){
+        for(const app of this.supportedApps){
+            await app.patch();
+        }
     }
     logSupportedApps(){
         this.supportedApps.forEach((app, i) => {

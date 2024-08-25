@@ -31,7 +31,7 @@ export default class Firefox extends AppPatch {
         let pref = fs.readFileSync(this.prefPath, "utf8");
         return pref.includes("user_pref(\"layers.acceleration.disabled\", true);") ? PatchType.PATCHED : PatchType.UNPATCHED;
     }
-    patch() {
+    async patch() {
         if(this.patched() === PatchType.PATCHED) return console.log(`${this.appName} already patched. Ignoring...`);
         let pref = fs.readFileSync(this.prefPath, "utf8");
         pref += "\n" + patchCode;
