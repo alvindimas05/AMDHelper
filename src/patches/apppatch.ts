@@ -1,6 +1,5 @@
 import fs from "fs";
-
-type Patched = 1 | 0 | -1;
+import {PatchType} from "@src/types";
 
 export default class AppPatch {
     appName: string;
@@ -9,7 +8,7 @@ export default class AppPatch {
         this.appPath = appPath;
         this.appName = appPath.split("/").pop()!.replace(/.app/g, '');
     }
-    patched(): Patched {
+    patched(): PatchType {
         throw new Error(`Method "patched" must be implemented on class ${this.constructor.name}`);
     }
     patch() {
@@ -20,7 +19,7 @@ export default class AppPatch {
     }
     pathExists(path: string): boolean {
         if(fs.existsSync(path)) return true;
-        console.log("Found Discord app but can't find discord data! Please open the discord first before install.");
+        console.log(`Found ${this.appName} app but can't find discord data! Please open the app first before patching.`);
         return false;
     }
 }
