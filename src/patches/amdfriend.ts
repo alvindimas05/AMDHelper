@@ -29,7 +29,7 @@ export default class Amdfriend extends AppPatch {
         if(this.patched() === PatchType.PATCHED) return console.log(`${this.appName} already patched. Ignoring...`);
         await parallelizer(this.patchDirectories(), cpus().length);
 
-        if(!isRoot()) fs.writeFileSync(this.patchedPath, "");
+        if(isRoot()) fs.writeFileSync(this.patchedPath, "");
     }
     *patchDirectories(): Generator<Promise<void>>{
         for (const dirent of walkDirectory(this.appPath, ["", ".dylib"], [".DS_Store"])) {
