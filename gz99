@@ -37,13 +37,13 @@ else
 fi
 }
 echo Finished GZIP compression, you now have a complete gz file
-echo You can stop here, but we will try to make the file smaller for you.
-rm $OUT.new || true
+#echo You can stop here, but we will try to make the file smaller for you.
+#rm $OUT.new || true
 #time 7z a $OUT.new -mx=9 -tgzip $OUT
-gunzip < $OUT | time 7z a $OUT.new -mx=9 -tgzip -si
+#gunzip < $OUT | time 7z a $OUT.new -mx=9 -tgzip -si
 #time 7z a dummy -mx=9 -tgzip -so -si $OUT.new $OUT
 
-accept_new
+#accept_new
 #cp $OUT $OUT.new
 #echo Trying advdef compression
 #time advdef -4 -z $OUT.new # instead link?
