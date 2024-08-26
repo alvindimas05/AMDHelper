@@ -1,4 +1,3 @@
-import fs from "fs";
 import {PatchType} from "@src/types";
 
 export default class AppPatch {
@@ -17,9 +16,7 @@ export default class AppPatch {
     supported(): boolean {
         throw new Error(`Method "supported" must be implemented on class ${this.constructor.name}`);
     }
-    pathExists(path: string): boolean {
-        if(fs.existsSync(path)) return true;
-        console.log(`Found ${this.appName} app but can't find discord data! Please open the app first before patching.`);
-        return false;
+    missingData(){
+        console.log(`Found ${this.appName} app but can't find the data! Please open the app first before patching.`);
     }
 }

@@ -10,9 +10,9 @@ export default class CommandLine {
     basePath = "/Applications/";
     supportedApps: App[];
     async start(){
+        console.log(`${chalk.red("AMD")}Helper\n`);
         this.getSupportedApplication();
 
-        console.log(`${chalk.red("AMD")}Helper\n`);
         console.log(`Applications that can be patched:`)
         this.logSupportedApps();
         console.log("\n")

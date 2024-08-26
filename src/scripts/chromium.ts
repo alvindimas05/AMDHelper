@@ -1,22 +1,35 @@
 export const amdhelperChromiumBashName = "amdhelper_chromium";
-export const amdhelperChromiumBash = (appname: string) => `
-appname="${appname}"
-is_running=0
+export const amdhelperChromiumBash = (applist: string[]) => `
+browsers=(${applist.map(item => `"${item}"`).join(" ")})
+running_browsers=()
+
+set +e #otherwise the script will exit on error
+containsElement () {
+  local e match="$1"
+  shift
+  for e; do [[ "$e" == "$match" ]] && return 1; done
+  return 0
+}
+
 while [ 1 ]; do
-  if [[ $(pgrep -f "$appname") ]]; then
-    if [[ $is_running == 0 ]]; then
-      pkill -x "$appname"
-      sleep 1
-      open -a /Applications/"$appname".app --args --enable-angle-features=disableBlendFuncExtended
-      echo "Detected user opening $appname..."
-      is_running=1
+  for appname in "\${browsers[@]}"; do
+    if [[ $(pgrep -x "$appname") ]]; then
+      containsElement "\${appname}" "\${running_browsers[@]}"
+      if [[ $? == 0 ]]; then
+        pkill -x "$appname"
+        sleep 1
+        open -a /Applications/"$appname".app --args --enable-angle-features=disableBlendFuncExtended
+        echo "Detected user opening $appname..."
+        running_browsers+=("$appname")
+      fi
+    else
+      containsElement "\${appname}" "\${running_browsers[@]}"
+      if [[ $? == 1 ]]; then
+        echo "Detected user exiting $appname..."
+        running_browsers=("\${running_browsers[@]/$appname}")
+      fi
     fi
-  else
-    if [[ $is_running == 1 ]]; then
-      echo "Detected user exiting $appname..."
-      is_running=0
-    fi
-  fi
+  done
   sleep 0.1
 done
 `;
@@ -33,7 +46,6 @@ export const amdhelperChromiumPlist = `
     <true/>
     <key>ProgramArguments</key>
     <array>
-        <string>/bin/sh</string>
         <string>/Library/amdhelper/amdhelper_chromium</string>
     </array>
     <key>RunAtLoad</key>

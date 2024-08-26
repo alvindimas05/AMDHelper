@@ -8,12 +8,13 @@ import {PatchType} from "@src/types";
 
 const discordPath = path.join(homedir(), "Library", "Application Support", "discord")
 export default class Discord extends AppPatch {
+    originalAppName = "Discord"
     patchedPath: string;
     krispPath: string;
     constructor(appPath: string) {
         super(appPath);
 
-        if(this.pathExists(discordPath)){
+        if(this.supported() && fs.existsSync(discordPath)){
             this.krispPath = path.join(
                 discordPath,
                 fs.readdirSync(discordPath)
@@ -28,11 +29,13 @@ export default class Discord extends AppPatch {
         return (fileExists ? PatchType.PATCHED : PatchType.UNPATCHED);
     }
     supported(): boolean {
-        return this.appName === "Discord";
+        return this.appName === this.originalAppName;
     }
 
     async patch(){
-        if(this.patched() === 1) return console.log(`${this.appName} already patched. Ignoring...`);
+        if(this.patched() === PatchType.PATCHED) return console.log(`${this.appName} already patched. Ignoring...`);
+        if(!fs.existsSync(discordPath)) return
+            console.log(`Found ${this.appName} app but can't find the data! Please open the app first before patching.`);
         await patchFile(this.krispPath, patchOptions);
 
         fs.writeFileSync(this.patchedPath, "");
