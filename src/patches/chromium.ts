@@ -19,12 +19,10 @@ interface ChromiumConfig {
 }
 
 const chromiumBrowsers = ["Chromium", "Google Chrome", "Arc", "Microsoft Edge", "Brave"];
-const exeName = "amdhelper_executable"
 export default class Chromium extends AppPatch {
     configPath: string | null = null;
     patchValue = "use-angle@1";
     oldPatchValues = ["enable-gpu-rasterization@1", "enable-gpu-rasterization@2"];
-    exePath = path.join(this.appPath, "Contents", "MacOS", exeName);
     bashPath = path.join("/", "Library", "amdhelper", amdhelperChromiumBashName);
     plistPath = path.join("/", "Library", "LaunchAgents", amdhelperChromiumPlistName);
     config: ChromiumConfig;
@@ -62,7 +60,10 @@ export default class Chromium extends AppPatch {
     }
     patched() {
         if(this.isOldPatch()) return PatchType.OLD_PATCH;
-        return fs.existsSync(this.bashPath) ? PatchType.PATCHED : PatchType.UNPATCHED;
+        return (fs.existsSync(this.bashPath) && this.config.browser !== undefined &&
+            this.config.browser.enabled_labs_experiments !== undefined &&
+            this.config.browser.enabled_labs_experiments.includes(this.patchValue))
+            ? PatchType.PATCHED : PatchType.UNPATCHED;
         // return fs.existsSync(this.exePath) ?
         //     PatchType.PATCHED : PatchType.UNPATCHED;
     }
@@ -102,7 +103,7 @@ export default class Chromium extends AppPatch {
     async addLaunchAgent(){
         fs.mkdirSync(path.join(this.bashPath, ".."), { recursive: true });
         fs.writeFileSync(this.bashPath,
-            amdhelperChromiumBash(this.appName));
+            amdhelperChromiumBash(chromiumBrowsers));
         await exec(`sudo chmod +x ${escapePathSpaces(this.bashPath)}`);
 
         fs.writeFileSync(this.plistPath, amdhelperChromiumPlist);
