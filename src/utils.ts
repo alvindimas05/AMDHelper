@@ -1,4 +1,3 @@
-// @ts-ignore
 import {promisify} from "util";
 import child_process from "child_process";
 import type {PatchOptions} from "amdfriend/src/types";
@@ -6,7 +5,9 @@ import fs from "fs";
 import path from "path";
 
 export const isRoot = () => process!.getuid() === 0 ;
+export const escapePathSpaces = (path: string) => path.replace(/(\s+)/g, '\\$1');
 
+// export const spawn = promisify(child_process.spawn);
 export const exec = promisify(child_process.exec);
 export const patchOptions: PatchOptions = {backup: false, clearXA: false, dryRun: false, inPlace: true, sign: true };
 

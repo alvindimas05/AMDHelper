@@ -2,20 +2,16 @@ import fs from "fs";
 import chalk from "chalk";
 import App from "@src/app";
 import inquirer from "inquirer";
-// @ts-ignore
 import clear from "console-clear";
 import path from "path";
 import {PatchType} from "@src/types";
 
-
 export default class CommandLine {
     basePath = "/Applications/";
-    // @ts-ignore
     supportedApps: App[];
     async start(){
         this.getSupportedApplication();
 
-        // @ts-ignore
         console.log(`${chalk.red("AMD")}Helper\n`);
         console.log(`Applications that can be patched:`)
         this.logSupportedApps();
@@ -60,14 +56,14 @@ export default class CommandLine {
 
             switch(app.patched()){
                 case PatchType.PATCHED:
-                    // @ts-ignore
                     status = chalk.green("PATCHED");
                     break;
                 case PatchType.UNPATCHED:
-                    // @ts-ignore
                     status = chalk.red("NOT PATCHED");
                     break;
-                // @ts-ignore
+                case PatchType.OLD_PATCH:
+                    status = chalk.blue("NEW PATCH");
+                    break;
                 default: status = chalk.yellow("UNDETECTED");
             }
 
