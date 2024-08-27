@@ -1,13 +1,13 @@
 # AMDHelper
 
 AMDHelper is an app to help patch unsupported apps on AMD Hackintoshes.
-This app patches app that use OpenGL and Intel MKL libraries.
+This app patches app that use Dual Source Blend (Previously thought to be OpenGL) and Intel MKL libraries.
 This program is experimental and might not fix all of your unsupported apps.
 
 ### How this works?
 - For apps that uses Intel MKL libraries, it used the [AMDFriend](https://github.com/NyaomiDEV/AMDFriend) to patch.
 
-- For apps that uses Dual Source Blend... (Previously thought to be OpenGL) Sorry to say this, but it's just disabling the GPU features
+- For apps that uses Dual Source Blend... Sorry to say this, but it's just disabling the GPU features
 from the apps. Our only option is to wait for [NootedRed](https://github.com/ChefKissInc/NootedRed) to fix this issue.
 
 ### How to use?
