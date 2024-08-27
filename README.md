@@ -7,8 +7,8 @@ This program is experimental and might not fix all of your unsupported apps.
 ### How this works?
 - For apps that uses Intel MKL libraries, it used the [AMDFriend](https://github.com/NyaomiDEV/AMDFriend) to patch.
 
-- For apps that uses OpenGL... Sorry to say this, but it's just disabling the GPU features
-from the apps. Our only option is to wait for NootedRed to fix this issue.
+- For apps that uses Dual Source Blend... (Previously thought to be OpenGL) Sorry to say this, but it's just disabling the GPU features
+from the apps. Our only option is to wait for [NootedRed](https://github.com/ChefKissInc/NootedRed) to fix this issue.
 
 ### How to use?
 
