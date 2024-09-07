@@ -16,7 +16,8 @@ export default class CommandLine {
         console.log(`Applications that can be patched:`)
         this.logSupportedApps();
         console.log("\n(A) Patch all apps")
-        console.log(`(E) ${global.patchElectronApps ? "Disable" : "Enable"} patch ${chalk.bold("ALL")} Electron apps (${chalk.rgb(255,99,71)("EXPERIMENTAL")})`)
+        console.log(`(E) ${global.patchElectronApps ? "Disable" : "Enable"} patch Electron apps (${chalk.rgb(255,99,71)("EXPERIMENTAL")})`)
+        if(global.patchElectronApps) console.log(`(G) ${global.disableGpuMode ? "Disable" : "Enable"} disable-gpu-rasterization patch instead of disableBlendFuncExtended (${chalk.rgb(255,99,71)("EXPERIMENTAL")})`)
         console.log("(Q) Quit")
 
         // @ts-ignore
@@ -35,6 +36,11 @@ export default class CommandLine {
             case "e":
                 global.patchElectronApps = !global.patchElectronApps;
                 break;
+            case "g":
+                if(global.patchElectronApps){
+                    global.disableGpuMode = !global.disableGpuMode;
+                    break;
+                }
             case "a":
                 await this.patchAllApps();
                 break;

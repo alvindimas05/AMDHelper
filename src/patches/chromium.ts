@@ -117,7 +117,7 @@ export default class Chromium extends AppPatch {
         if(global.patchElectronApps) apps.push(...global.electronApps);
 
         fs.mkdirSync(path.join(this.bashPath, ".."), { recursive: true });
-        fs.writeFileSync(this.bashPath, amdhelperChromiumBash(apps));
+        fs.writeFileSync(this.bashPath, amdhelperChromiumBash(apps, global.disableGpuMode));
         await exec(`sudo chmod +x ${escapePathSpaces(this.bashPath)}`);
 
         fs.writeFileSync(this.plistPath, amdhelperChromiumPlist);
