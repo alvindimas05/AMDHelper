@@ -1,5 +1,5 @@
 export const amdhelperChromiumBashName = "amdhelper_chromium";
-export const amdhelperChromiumBash = (applist: string[]) => `
+export const amdhelperChromiumBash = (applist: string[], disableGpuMode = false) => `
 browsers=(${applist.map(item => `"${item}"`).join(" ")})
 running_browsers=()
 
@@ -18,7 +18,7 @@ while [ 1 ]; do
       if [[ $? == 0 ]]; then
         pkill -x "$appname"
         sleep 1
-        open -a /Applications/"$appname".app --args --enable-angle-features=disableBlendFuncExtended
+        open -a /Applications/"$appname".app --args ${disableGpuMode ? "--disable-gpu-rasterization" : "--enable-angle-features=disableBlendFuncExtended --use-angle=gl"}
         echo "Detected user opening $appname..."
         running_browsers+=("$appname")
       fi

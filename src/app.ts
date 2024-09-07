@@ -14,6 +14,7 @@ export default class App {
         this.path = path;
         this.name = path.split("/").pop()!.replace(/.app/g, '');
 
+        global.electronApps = [];
         this.appPatches = [
             new Chromium(path),
             new Amdfriend(path),

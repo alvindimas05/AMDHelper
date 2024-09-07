@@ -16,7 +16,7 @@ while [ 1 ]; do
       if [[ $? == 0 ]]; then
         pkill -x "$appname"
         sleep 1
-        open -a /Applications/"$appname".app --args --enable-angle-features=disableBlendFuncExtended
+        open -a /Applications/"$appname".app --args --enable-angle-features=disableBlendFuncExtended --use-angle=gl
         echo "Detected user opening $appname..."
         running_browsers+=("$appname")
       fi

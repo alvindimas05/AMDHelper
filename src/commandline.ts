@@ -15,8 +15,8 @@ export default class CommandLine {
 
         console.log(`Applications that can be patched:`)
         this.logSupportedApps();
-        console.log("\n")
-        console.log("(A) Patch all apps")
+        console.log("\n(A) Patch all apps")
+        console.log(`(E) ${global.patchElectronApps ? "Disable" : "Enable"} patch ${chalk.bold("ALL")} Electron apps (${chalk.rgb(255,99,71)("EXPERIMENTAL")})`)
         console.log("(Q) Quit")
 
         // @ts-ignore
@@ -32,6 +32,9 @@ export default class CommandLine {
                 console.log("Bye!");
                 process.exit();
                 break;
+            case "e":
+                global.patchElectronApps = !global.patchElectronApps;
+                break;
             case "a":
                 await this.patchAllApps();
                 break;
@@ -39,7 +42,6 @@ export default class CommandLine {
                 const val = parseInt(value);
                 if(!isNaN(val) && val <= this.supportedApps.length + 1 && val > 0)
                     await this.supportedApps[val-1].patch()
-
         }
 
         const cli = new CommandLine();
@@ -63,6 +65,9 @@ export default class CommandLine {
                     break;
                 case PatchType.OLD_PATCH:
                     status = chalk.blue("NEW PATCH");
+                    break;
+                case PatchType.EXPERIMENTAL:
+                    status = chalk.rgb(255,99,71)("EXPERIMENTAL");
                     break;
                 default: status = chalk.yellow("UNDETECTED");
             }
