@@ -19,13 +19,13 @@ interface ChromiumConfig {
 }
 
 const chromiumBrowsers = ["Chromium", "Google Chrome", "Arc", "Microsoft Edge", "Brave"];
+export const bashPath = path.join("/", "Library", "amdhelper", amdhelperChromiumBashName);
+export const plistPath = path.join("/", "Library", "LaunchAgents", amdhelperChromiumPlistName);
 
 export default class Chromium extends AppPatch {
     configPath: string | null = null;
     // patchValue = "use-angle@1";
     oldPatchValues = ["enable-gpu-rasterization@1", "enable-gpu-rasterization@2"];
-    bashPath = path.join("/", "Library", "amdhelper", amdhelperChromiumBashName);
-    plistPath = path.join("/", "Library", "LaunchAgents", amdhelperChromiumPlistName);
     config: ChromiumConfig;
     constructor(appPath: string) {
         super(appPath);
@@ -59,47 +59,20 @@ export default class Chromium extends AppPatch {
     }
     supported() {
         return (chromiumBrowsers.includes(this.appName) && this.configPath != null) ||
-            (global.patchElectronApps && this.supportElectron());
+        this.supportElectron();
     }
     supportElectron(){
         return fs.existsSync(path.join("/Applications", `${this.appName}.app`, "Contents", "Frameworks", "Electron Framework.framework"))
     }
+    selected(): boolean {
+        return global.chromiumApps.findIndex(fapp => fapp.name === this.appName) !== -1
+    }
     patched() {
+        if(this.selected()) return PatchType.SELECTED;
         if(this.isOldPatch()) return PatchType.OLD_PATCH;
         if(this.supportElectron()) return PatchType.EXPERIMENTAL;
-        return fs.existsSync(this.bashPath) ?
-            PatchType.PATCHED : PatchType.UNPATCHED;
-        // return (fs.existsSync(this.bashPath) && this.config.browser !== undefined &&
-        //     this.config.browser.enabled_labs_experiments !== undefined &&
-        //     this.config.browser.enabled_labs_experiments.includes(this.patchValue))
-        //     ? PatchType.PATCHED : PatchType.UNPATCHED;
+        return fs.existsSync(bashPath) ? PatchType.PATCHED : PatchType.UNPATCHED;
     }
-    async patch(){
-        // if(this.configPath == undefined || this.config == null){
-        //     console.error(`Can't apply patch to ${this.appName}! Config not found.`)
-        //     return;
-        // }
-
-        if(this.isOldPatch()) this.removeOldPatch();
-
-        // if(this.patched()){
-        //     console.log(`${this.appName} already patched. Ignoring...`);
-        //     return;
-        // }
-
-        console.log(`Applying patch to ${this.appName}...`);
-        if(global.electronApps.indexOf(this.appName) === -1) global.electronApps.push(this.appName);
-
-        // this.apply();
-        // this.save();
-        await this.addLaunchAgent();
-    }
-    // apply(){
-    //     if(this.config.browser === undefined) this.config.browser = { enabled_labs_experiments: [] };
-    //     if(this.config.browser.enabled_labs_experiments === undefined) this.config.browser.enabled_labs_experiments = [];
-    //     this.config.browser!.enabled_labs_experiments.push(this.patchValue);
-    //     console.log(`Patch applied to ${this.appName}!`)
-    // }
     save(){
         fs.writeFileSync(this.configPath!, JSON.stringify(this.config));
     }
@@ -108,22 +81,8 @@ export default class Chromium extends AppPatch {
             this.config.browser.enabled_labs_experiments !== undefined &&
             this.config.browser.enabled_labs_experiments.some(value => this.oldPatchValues.includes(value)))
     }
-    async addLaunchAgent(){
-        try {
-            await exec(`pkill -f bash`);
-        } catch {}
-
-        let apps = chromiumBrowsers;
-        if(global.patchElectronApps) apps.push(...global.electronApps);
-
-        fs.mkdirSync(path.join(this.bashPath, ".."), { recursive: true });
-        fs.writeFileSync(this.bashPath, amdhelperChromiumBash(apps, global.disableGpuMode));
-        await exec(`sudo chmod +x ${escapePathSpaces(this.bashPath)}`);
-
-        fs.writeFileSync(this.plistPath, amdhelperChromiumPlist);
-        child_process.spawn("bash", [this.bashPath], { detached: true });
-    }
     removeOldPatch(){
+        if (!this.isOldPatch()) return;
         if(this.config.browser === undefined) return;
         if(this.config.browser.enabled_labs_experiments === undefined) return;
         this.config.browser!.enabled_labs_experiments =
@@ -131,4 +90,27 @@ export default class Chromium extends AppPatch {
         this.save();
         console.log(`Removing old patch from ${this.appName}!`)
     }
+}
+
+async function killPatchProcess(){
+    try { await exec(`pkill -f bash`) } catch {}
+    try { await exec(`pkill -f amdhelper_chromium`) } catch {}
+}
+
+export async function patchChromiumApps(){
+    killPatchProcess();
+    const apps = global.chromiumApps.map(app => app.name);
+
+    fs.mkdirSync(path.join(bashPath, ".."), { recursive: true });
+    fs.writeFileSync(bashPath, amdhelperChromiumBash(apps, global.disableGpuMode));
+    await exec(`sudo chmod +x ${escapePathSpaces(bashPath)}`);
+
+    fs.writeFileSync(plistPath, amdhelperChromiumPlist);
+}
+
+export async function removePatchChromiumApps(){
+    console.log("Removing chromium apps patch...");
+    killPatchProcess();
+    try { fs.rmSync(bashPath) } catch {}
+    try { fs.rmSync(plistPath) } catch {}
 }

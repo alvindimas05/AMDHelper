@@ -31,6 +31,8 @@ async function main(){
     await check_update();
     if(!isRoot()) console.log("Please run as sudo to detect apps that's not patched.");
 
+    global.chromiumApps = [];
+    
     const cli = new CommandLine();
     await cli.start();
 }

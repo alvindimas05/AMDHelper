@@ -5,6 +5,9 @@ import inquirer from "inquirer";
 import clear from "console-clear";
 import path from "path";
 import {PatchType} from "@src/types";
+import Chromium, { bashPath, patchChromiumApps, removePatchChromiumApps } from "./patches/chromium";
+import { exec } from "./utils";
+import child_process from "child_process";
 
 export default class CommandLine {
     basePath = "/Applications/";
@@ -15,9 +18,19 @@ export default class CommandLine {
 
         console.log(`Applications that can be patched:`)
         this.logSupportedApps();
-        console.log("\n(A) Patch all apps")
-        console.log(`(G) ${global.disableGpuMode ? "Disable" : "Enable"} disable-gpu-rasterization patch instead of disableBlendFuncExtended`)
-        console.log(`(E) ${global.patchElectronApps ? "Disable" : "Enable"} patch Electron apps (${chalk.rgb(255,99,71)("EXPERIMENTAL")})`)
+        console.log("");
+        if(global.commandlineChromiumMode){
+            if (global.disableGpuMode) {
+                console.log(`(G) Use disableBlendFuncExtended patch instead of disable-gpu-rasterization`)  
+            } else {
+                console.log(`(G) Use disable-gpu-rasterization patch instead of disableBlendFuncExtended`)
+            }
+            if(global.chromiumApps.length > 0) console.log("(P) Patch selected chromium apps.")
+            console.log("(R) Remove chromium apps patch")
+        } else {
+            console.log("(A) Patch all apps")
+        }
+        console.log(`(C) ${global.commandlineChromiumMode ? "Exit" : "Enter"} Chromium apps mode (${chalk.rgb(255,99,71)("EXPERIMENTAL")})`)
         console.log("(Q) Quit")
 
         // @ts-ignore
@@ -33,19 +46,52 @@ export default class CommandLine {
                 console.log("Bye!");
                 process.exit();
                 break;
-            case "e":
-                global.patchElectronApps = !global.patchElectronApps;
+            case "c":
+                global.commandlineChromiumMode = !global.commandlineChromiumMode;
                 break;
             case "g":
                 global.disableGpuMode = !global.disableGpuMode;
                 break;
             case "a":
-                await this.patchAllApps();
-                break;
+                if(!global.commandlineChromiumMode){
+                    await this.patchAllApps();
+                    break;
+                }
+            case "p":
+                if(global.chromiumApps.length > 0){
+                    console.log("Applying chromium apps patch...")
+                    
+                    const macosVersion = (await exec("sw_vers -productVersion")).stdout;
+                    const majorVersion = parseInt(macosVersion.split(".")[0]);
+                    const minorVersion = parseInt(macosVersion.split(".")[1]);
+                    if(majorVersion > 13 && minorVersion > 3){
+                        console.log("You are running on MacOS Sonoma 14.3.1 or above. Please restart or run the command below to start.");
+                        console.log(`bash ${bashPath} &`)
+                    } else {
+                        child_process.spawn("bash", [bashPath], { stdio: "ignore", detached: true }).unref();
+                    }
+                        
+                    patchChromiumApps();
+                    break;
+                }
+            case "r":
+                if(global.commandlineChromiumMode){
+                    removePatchChromiumApps();
+                    break;
+                }
             default:
                 const val = parseInt(value);
-                if(!isNaN(val) && val <= this.supportedApps.length + 1 && val > 0)
-                    await this.supportedApps[val-1].patch()
+                if (isNaN(val) || val < 1 || val > this.supportedApps.length + 1) break;
+                const app = this.supportedApps[val - 1];
+                
+                if (global.commandlineChromiumMode) {
+                    // @ts-ignore
+                    const appPatch: Chromium = app.getAppPatch();
+                    if(appPatch.selected()) break;
+                    global.chromiumApps.push(app);
+                } else {
+                    await app.patch()
+                }
         }
 
         const cli = new CommandLine();
@@ -72,6 +118,9 @@ export default class CommandLine {
                     break;
                 case PatchType.EXPERIMENTAL:
                     status = chalk.rgb(255,99,71)("EXPERIMENTAL");
+                    break;
+                case PatchType.SELECTED:
+                    status = chalk.cyan("SELECTED");
                     break;
                 default: status = chalk.yellow("UNDETECTED");
             }

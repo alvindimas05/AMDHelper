@@ -13,15 +13,21 @@ export default class App {
     constructor(path: string) {
         this.path = path;
         this.name = path.split("/").pop()!.replace(/.app/g, '');
-
-        global.electronApps = [];
         this.appPatches = [
-            new Chromium(path),
             new Amdfriend(path),
             new Discord(path),
             new Firefox(path),
             new FirefoxDev(path),
         ];
+        if(global.commandlineChromiumMode){
+            this.appPatches = [new Chromium(path)];
+        }
+    }
+    getAppPatch(): AppPatch {
+        for(const app of this.appPatches){
+            if(!app.supported()) continue;
+            return app;
+        }
     }
     async patch() {
         for(const app of this.appPatches){
