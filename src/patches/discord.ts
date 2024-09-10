@@ -19,7 +19,7 @@ export default class Discord extends AppPatch {
                 discordPath,
                 fs.readdirSync(discordPath)
                     .filter(a => a != ".DS_Store")
-                    .sort((a, b) => a.localeCompare(b))[0]
+                    .find(val => val.startsWith("0."))
                 , "modules", "discord_krisp", "discord_krisp.node");
             this.patchedPath = path.join(this.krispPath, "..", ".amdhelper");
         }
@@ -34,8 +34,7 @@ export default class Discord extends AppPatch {
 
     async patch(){
         if(this.patched() === PatchType.PATCHED) return console.log(`${this.appName} already patched. Ignoring...`);
-        if(!fs.existsSync(discordPath)) return
-            console.log(`Found ${this.appName} app but can't find the data! Please open the app first before patching.`);
+        if(!fs.existsSync(discordPath)) return this.missingData();
         await patchFile(this.krispPath, patchOptions);
 
         fs.writeFileSync(this.patchedPath, "");
