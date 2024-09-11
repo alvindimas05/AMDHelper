@@ -1,5 +1,5 @@
 export const amdhelperChromiumBashName = "amdhelper_chromium";
-export const amdhelperChromiumBash = (applist: string[], disableGpuMode = false) => `
+export const amdhelperChromiumBash = (applist: string[], disableGpuMode = false) => `   
 browsers=(${applist.map(item => `"${item}"`).join(" ")})
 running_browsers=()
 

@@ -105,7 +105,7 @@ export async function patchChromiumApps(){
     fs.writeFileSync(bashPath, amdhelperChromiumBash(apps, global.disableGpuMode));
     await exec(`sudo chmod +x ${escapePathSpaces(bashPath)}`);
 
-    fs.writeFileSync(plistPath, amdhelperChromiumPlist);
+    fs.writeFileSync(plistPath, amdhelperChromiumPlist);    
 }
 
 export async function removePatchChromiumApps(){

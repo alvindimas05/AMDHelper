@@ -59,19 +59,18 @@ export default class CommandLine {
                 }
             case "p":
                 if(global.chromiumApps.length > 0){
-                    console.log("Applying chromium apps patch...")
-                    
+                    console.log("Applying chromium apps patch...");
+
+                    let runBash = false;
                     const macosVersion = (await exec("sw_vers -productVersion")).stdout;
                     const majorVersion = parseInt(macosVersion.split(".")[0]);
                     const minorVersion = parseInt(macosVersion.split(".")[1]);
                     if(majorVersion > 13 && minorVersion > 3){
-                        console.log("You are running on MacOS Sonoma 14.3.1 or above. Please restart or run the command below to start.");
-                        console.log(`bash ${bashPath} &`)
-                    } else {
-                        child_process.spawn("bash", [bashPath], { stdio: "ignore", detached: true }).unref();
+                        console.log("You are running on MacOS Sonoma 14.3.1 or above. You might need to restart to start the patch script.");
                     }
                         
-                    patchChromiumApps();
+                    await patchChromiumApps();
+                    child_process.spawn("bash", [bashPath], { stdio: "ignore", detached: true }).unref();
                     break;
                 }
             case "r":
