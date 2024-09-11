@@ -66,7 +66,7 @@ export default class CommandLine {
                     const majorVersion = parseInt(macosVersion.split(".")[0]);
                     const minorVersion = parseInt(macosVersion.split(".")[1]);
                     if(majorVersion > 13 && minorVersion > 3){
-                        console.log("You are running on MacOS Sonoma 14.3.1 or above. You might need to restart to start the patch script.");
+                        console.log("You are running on MacOS Sonoma 14.4 or above. You might need to restart to start the patch script.");
                     }
                         
                     await patchChromiumApps();
