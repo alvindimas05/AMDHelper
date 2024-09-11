@@ -1,6 +1,6 @@
 export const amdhelperChromiumBashName = "amdhelper_chromium";
 export const amdhelperChromiumBash = (applist: string[], disableGpuMode = false) => `   
-browsers=(${applist.map(item => `"${item}"`).join(" ")})
+browsers=(${applist.map(item => `"${item}"`).join(" ")})w
 running_browsers=()
 
 set +e #otherwise the script will exit on error

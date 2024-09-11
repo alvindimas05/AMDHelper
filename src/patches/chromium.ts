@@ -70,8 +70,17 @@ export default class Chromium extends AppPatch {
     patched() {
         if(this.selected()) return PatchType.SELECTED;
         if(this.isOldPatch()) return PatchType.OLD_PATCH;
+        if(this.bashPatched()) return PatchType.PATCHED
         if(this.supportElectron()) return PatchType.EXPERIMENTAL;
-        return fs.existsSync(bashPath) ? PatchType.PATCHED : PatchType.UNPATCHED;
+        return PatchType.UNPATCHED;
+    }
+    bashPatched(){
+        try {
+            return fs.readFileSync(bashPath).toString("utf8").trimStart().split("\n")[0].
+                includes(this.appName);
+        } catch {
+            return false;
+        }
     }
     save(){
         fs.writeFileSync(this.configPath!, JSON.stringify(this.config));
