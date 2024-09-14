@@ -1,6 +1,9 @@
 export const amdhelperChromiumBashName = "amdhelper_chromium";
-export const amdhelperChromiumBash = (applist: string[], disableGpuMode = false) => `   
-browsers=(${applist.map(item => `"${item}"`).join(" ")})w
+export const amdhelperChromiumBash = (
+    applist: string[],
+    disableGpuMode = false,
+) => `
+browsers=(${applist.map((item) => `"${item}"`).join(" ")})
 running_browsers=()
 
 set +e #otherwise the script will exit on error
@@ -34,7 +37,8 @@ while [ 1 ]; do
 done
 `;
 
-export const amdhelperChromiumPlistName = "org.alvindimas05.amdhelper_chromium.plist";
+export const amdhelperChromiumPlistName =
+    "org.alvindimas05.amdhelper_chromium.plist";
 export const amdhelperChromiumPlist = `
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">

@@ -63,6 +63,7 @@ export default class Chromium extends AppPatch {
     }
     supportElectron(){
         return fs.existsSync(path.join("/Applications", `${this.appName}.app`, "Contents", "Frameworks", "Electron Framework.framework"))
+            || fs.existsSync(path.join("/Applications", `${this.appName}.app`, "Contents", "Frameworks", "Chromium Embedded Framework.framework"));
     }
     selected(): boolean {
         return global.chromiumApps.findIndex(fapp => fapp.name === this.appName) !== -1
