@@ -1,41 +1,66 @@
 import AppPatch from "@patches/apppatch";
 import path from "path";
-import {homedir} from "os";
+import { homedir } from "os";
 import fs from "fs";
-import {PatchType} from "@src/types";
+import { PatchType } from "@src/types";
 
-const patchCode = "user_pref(\"layers.acceleration.disabled\", true);"
+const patchCode = 'user_pref("layers.acceleration.disabled", true);';
 export default class Firefox extends AppPatch {
-    originalAppName = "Firefox"
-    prefPathName = ".default-release"
-    firefoxPath = path.join(homedir(), "Library", "Application Support", "Firefox", "Profiles")
-    prefPath: string
+    originalAppName = "Firefox";
+    firefoxPath = path.join(
+        homedir(),
+        "Library",
+        "Application Support",
+        "Firefox",
+        "Profiles",
+    );
+    // prefPath: string
     constructor(appName: string) {
         super(appName);
-        this.setPrefPath();
+        // this.setPrefPath();
     }
-    setPrefPath(){
-        if(this.supported() && fs.existsSync(this.firefoxPath)){
-            fs.readdirSync(this.firefoxPath).forEach(dir => {
-                if(dir.endsWith(this.prefPathName)){
-                    this.prefPath = path.join(this.firefoxPath, dir, "prefs.js");
-                }
-            });
-        }
-    }
+    // setPrefPath(){
+    //     if(this.supported() && fs.existsSync(this.firefoxPath)){
+    //         fs.readdirSync(this.firefoxPath).forEach(dir => {
+    //             if(dir.endsWith(this.prefPathName)){
+    //                 this.prefPath = path.join(this.firefoxPath, dir, "prefs.js");
+    //             }
+    //         });
+    //     }
+    // }
     supported(): boolean {
         return this.appName === this.originalAppName;
     }
     patched() {
-        if(!fs.existsSync(this.firefoxPath)) return PatchType.UNPATCHED;
-        let pref = fs.readFileSync(this.prefPath, "utf8");
-        return pref.includes("user_pref(\"layers.acceleration.disabled\", true);") ? PatchType.PATCHED : PatchType.UNPATCHED;
+        if (!fs.existsSync(this.firefoxPath)) return PatchType.UNPATCHED;
+        try {
+            for(const dir of fs.readdirSync(this.firefoxPath)) {
+                const prefPath = path.join(this.firefoxPath, dir, "prefs.js");
+                if (!fs.existsSync(prefPath)) continue;
+                
+                if (!fs.readFileSync(prefPath, "utf8").includes(patchCode)) {
+                    return PatchType.UNPATCHED;
+                }
+            };
+        } catch {
+            return PatchType.UNPATCHED;
+        }
+        return PatchType.PATCHED;
     }
     async patch() {
-        if(this.patched() === PatchType.PATCHED) return console.log(`${this.appName} already patched. Ignoring...`);
-        if(fs.existsSync(this.firefoxPath)) return this.missingData();
-        let pref = fs.readFileSync(this.prefPath, "utf8");
-        pref += "\n" + patchCode;
-        fs.writeFileSync(this.prefPath, pref);
+        if (this.patched() === PatchType.PATCHED)
+            return console.log(`${this.appName} already patched. Ignoring...`);
+        try {
+            fs.readdirSync(this.firefoxPath).forEach((dir) => {
+                const prefPath = path.join(this.firefoxPath, dir, "prefs.js");
+                let pref = fs.readFileSync(prefPath, "utf8");
+                if (!fs.existsSync(prefPath) || pref.includes(patchCode)) return;
+                
+                pref += "\n" + patchCode;
+                fs.writeFileSync(prefPath, pref);
+            });
+        } catch (e) {
+            console.error(`Error while patching ${this.appName}: ` + e);
+        }
     }
 }

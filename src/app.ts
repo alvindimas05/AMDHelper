@@ -3,7 +3,6 @@ import Amdfriend from "@patches/amdfriend";
 import AppPatch from "@patches/apppatch";
 import Discord from "@patches/discord";
 import Firefox from "@patches/firefox";
-import FirefoxDev from "@patches/firefox-dev";
 import {PatchType} from "@src/types";
 
 export default class App {
@@ -17,7 +16,6 @@ export default class App {
             new Amdfriend(path),
             new Discord(path),
             new Firefox(path),
-            new FirefoxDev(path),
         ];
         if(global.commandlineChromiumMode){
             this.appPatches = [new Chromium(path)];
