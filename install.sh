@@ -1,5 +1,3 @@
-curl -sL https://raw.githubusercontent.com/alvindimas05/AMDHelper/main/install_ryzenadj.sh | bash
-
 echo "Installing AMDHelper..."
 curl -sSL https://github.com/alvindimas05/AMDHelper/releases/latest/download/amdhelper.gz -o amdhelper.gz
 tar -xvzf amdhelper.gz
