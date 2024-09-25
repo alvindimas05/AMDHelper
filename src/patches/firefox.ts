@@ -14,20 +14,9 @@ export default class Firefox extends AppPatch {
         "Firefox",
         "Profiles",
     );
-    // prefPath: string
     constructor(appName: string) {
         super(appName);
-        // this.setPrefPath();
     }
-    // setPrefPath(){
-    //     if(this.supported() && fs.existsSync(this.firefoxPath)){
-    //         fs.readdirSync(this.firefoxPath).forEach(dir => {
-    //             if(dir.endsWith(this.prefPathName)){
-    //                 this.prefPath = path.join(this.firefoxPath, dir, "prefs.js");
-    //             }
-    //         });
-    //     }
-    // }
     supported(): boolean {
         return this.appName === this.originalAppName;
     }

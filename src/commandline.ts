@@ -61,7 +61,6 @@ export default class CommandLine {
                 if(global.chromiumApps.length > 0){
                     console.log("Applying chromium apps patch...");
 
-                    let runBash = false;
                     const macosVersion = (await exec("sw_vers -productVersion")).stdout;
                     const majorVersion = parseInt(macosVersion.split(".")[0]);
                     const minorVersion = parseInt(macosVersion.split(".")[1]);

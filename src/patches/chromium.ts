@@ -103,7 +103,7 @@ export default class Chromium extends AppPatch {
 }
 
 async function killPatchProcess(){
-    try { await exec(`pkill -f bash`) } catch {}
+    // try { await exec(`pkill -f bash`) } catch {}
     try { await exec(`pkill -f amdhelper_chromium`) } catch {}
 }
 
