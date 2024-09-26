@@ -49,10 +49,7 @@ const plist = `
 	<key>EnablePressuredExit</key>
 	<true/>
 	<key>KeepAlive</key>
-	<dict>
-		<key>Crashed</key>
-		<true/>
-	</dict>
+	<false/>
 	<key>Label</key>
 	<string>org.alvindimas05.ryzenadj</string>
 	<key>OnDemand</key>
