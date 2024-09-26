@@ -1,1 +1,0 @@
-echo 'password' | sudo -S /usr/local/bin/ryzenadj --stapm-limit=13000 --slow-limit=14000 --fast-limit=15000 --vrm-current=11000 --vrmmax-current=16000 --vrmsoc-current=0 --vrmsocmax-current=0 --vrmgfx-current=0 --psi0-current=0 --psi0soc-current=0 --tctl-temp=59 --apu-skin-temp=59 --stapm-time=64 --slow-time=128 --power-saving

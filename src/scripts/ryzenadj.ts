@@ -1,57 +1,93 @@
 import { escapePathSpaces, exec } from "@src/utils";
 import fs from "fs";
-import inquirer from "inquirer";
 import path from "path";
 
-const bashPath = path.join("/", "Library", "amdhelper", "amdhelper_ryzenadj");
-const plistPath = path.join("/", "Library", "LaunchAgents", "org.alvindimas05.amdhelper_ryzenadj.plist");
-const tuning = "--stapm-limit=13000 --slow-limit=14000 --fast-limit=15000 --vrm-current=11000 --vrmmax-current=16000 --vrmsoc-current=0 --vrmsocmax-current=0 --vrmgfx-current=0 --psi0-current=0 --psi0soc-current=0 --tctl-temp=59 --apu-skin-temp=59 --stapm-time=64 --slow-time=128 --power-saving"
-export default class Ryzenadj {
-    enabled(){
-        return fs.existsSync(bashPath) || fs.existsSync(plistPath);
-    }
-    async apply(){
-        // @ts-ignore
-        const answers = await inquirer.prompt([{ type: "input", name: "password", message: "Enter Password: " }]);
+const localBinPath = escapePathSpaces("/usr/local/bin");
+const ryzenadjPath = escapePathSpaces(`${localBinPath}/ryzenadj`);
+const plistPath = escapePathSpaces(
+    "/Library/LaunchDaemons/org.alvindimas05.ryzenadj.plist"
+);
 
-        await this.installRyzenadj();
-        
-        try { await exec("sudo ryzenadj " + tuning) } catch {}
-        
+export default class Ryzenadj {
+    enabled() {
+        return fs.existsSync(ryzenadjPath) || fs.existsSync(plistPath);
+    }
+    async apply() {
         console.log("Applying battery optimization...");
-        
-        fs.mkdirSync(path.join(bashPath, ".."), { recursive: true });
-        fs.writeFileSync(bashPath, `echo '${answers.password}' | sudo -S /usr/local/bin/ryzenadj ${tuning}`);
-        await exec(`sudo chmod +x ${escapePathSpaces(bashPath)}`);
-        
+
+        await exec(`mkdir -p ${localBinPath}`);
+        await exec(
+            `curl -sL https://github.com/alvindimas05/AMDHelper/raw/refs/heads/main/ryzenadj -o ${ryzenadjPath}`
+        );
+        await exec(`xattr -c ${ryzenadjPath}`);
+        await exec(`chmod 644 ${ryzenadjPath}`);
+        await exec(`chown 0:0 ${ryzenadjPath}`);
         fs.writeFileSync(plistPath, plist);
+        await exec(`xattr -c ${plistPath}`);
+        await exec(`chmod 644 ${plistPath}`);
+        await exec(`chown 0:0 ${plistPath}`);
+        await exec(`launchctl load ${plistPath}`);
     }
-    async installRyzenadj(){
-        const curl = await exec(`curl -sL ${process.env.INSTALL_RYZENADJ_URL}`);
-        for(let cmd of curl.stdout.split("\n")){
-            if(cmd.length === 0) return;
-            const { stdout } = await exec(cmd);
-            if(stdout != "") console.log(`${stdout.slice(0, -1)}`);
-        }
-    }
-    async remove(){
+    async remove() {
         console.log("Removing battery optimization...");
-        try { fs.rmSync(bashPath) } catch {}
-        try { fs.rmSync(plistPath) } catch {}
+
+        await exec(`launchctl unload ${plistPath}`);
+        try {
+            fs.rmSync(ryzenadjPath);
+        } catch {}
+        try {
+            fs.rmSync(plistPath);
+        } catch {}
     }
 }
+
 const plist = `
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-    <key>Label</key>
-    <string>org.alvindimas05.amdhelper_ryzenadj</string>
-    <key>ProgramArguments</key>
-    <array>
-        <string>/Library/amdhelper/amdhelper_ryzenadj</string>
-    </array>
-    <key>RunAtLoad</key>
-    <true/>
+	<key>EnablePressuredExit</key>
+	<true/>
+	<key>KeepAlive</key>
+	<dict>
+		<key>Crashed</key>
+		<true/>
+	</dict>
+	<key>Label</key>
+	<string>org.alvindimas05.ryzenadj</string>
+	<key>OnDemand</key>
+	<false/>
+	<key>ProcessType</key>
+	<string>App</string>
+	<key>ProgramArguments</key>
+	<array>
+		<string>/usr/local/bin/ryzenadj</string>
+		<string>--stapm-limit=13000</string>
+		<string>--slow-limit=14000</string>
+		<string>--fast-limit=15000</string>
+		<string>--vrm-current=11000</string>
+		<string>--vrmmax-current=16000</string>
+		<string>--vrmsoc-current=0</string>
+		<string>--vrmsocmax-current=0</string>
+		<string>--vrmgfx-current=0</string>
+		<string>--psi0-current=0</string>
+		<string>--psi0soc-current=0</string>
+		<string>--tctl-temp=59</string>
+		<string>--apu-skin-temp=59</string>
+		<string>--stapm-time=64</string>
+		<string>--slow-time=128</string>
+		<string>--power-saving</string>
+	</array>
+	<key>RunAtLoad</key>
+	<true/>
+	<key>StandardErrorPath</key>
+	<string>/tmp/ryzenadj.err.log</string>
+	<key>StandardOutPath</key>
+	<string>/tmp/ryzenadj.log</string>
+	<key>ThrottleInterval</key>
+	<integer>1</integer>
+	<key>UserName</key>
+	<string>root</string>
 </dict>
-</plist>`
+</plist>
+`;
