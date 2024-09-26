@@ -17,7 +17,7 @@ interface ChromiumConfig {
     }
 }
 
-const chromiumBrowsers = ["Chromium", "Google Chrome", "Arc", "Microsoft Edge", "Brave"];
+const chromiumBrowsers = ["Chromium", "Google Chrome", "Arc", "Microsoft Edge", "Brave Browser"];
 export const bashPath = path.join("/", "Library", "amdhelper", amdhelperChromiumBashName);
 export const plistPath = path.join("/", "Library", "LaunchAgents", amdhelperChromiumPlistName);
 
@@ -57,12 +57,22 @@ export default class Chromium extends AppPatch {
         this.config = JSON.parse(fs.readFileSync(this.configPath).toString("utf8"));
     }
     supported() {
-        return (chromiumBrowsers.includes(this.appName) && this.configPath != null) ||
-        this.supportElectron();
+        return chromiumBrowsers.includes(this.appName) || this.isChromiumBrowser() || this.supportElectron();
     }
     supportElectron(){
-        return fs.existsSync(path.join("/Applications", `${this.appName}.app`, "Contents", "Frameworks", "Electron Framework.framework"))
-            || fs.existsSync(path.join("/Applications", `${this.appName}.app`, "Contents", "Frameworks", "Chromium Embedded Framework.framework"));
+        return fs.existsSync(path.join(this.appPath, "Contents", "Frameworks", "Electron Framework.framework"))
+            || fs.existsSync(path.join(this.appPath, "Contents", "Frameworks", "Chromium Embedded Framework.framework"));
+    }
+    isChromiumBrowser(): boolean {
+        if (!fs.existsSync(path.join(this.appPath, "Contents", "Frameworks"))) return false;
+        
+        const frameworks = fs.readdirSync(path.join(this.appPath, "Contents", "Frameworks"))
+        for(const framework of frameworks){
+            if (!framework.startsWith(this.appName) || !framework.endsWith(".framework")) continue;
+            return fs.existsSync(path.join(this.appPath, "Contents", "Frameworks", framework, "Helpers",
+                `${this.appName} Helper (GPU).app`));
+        }
+        return false
     }
     selected(): boolean {
         return global.chromiumApps.findIndex(fapp => fapp.name === this.appName) !== -1

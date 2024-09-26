@@ -5,10 +5,14 @@ interface UpdateResponse {
 }
 
 export async function check_update(){
-    const res = await fetch(process.env.RELEASE_URL);
-    const data : UpdateResponse[] = await res.json();
-    if(data[0].tag_name === process.env.VERSION) return;
-    console.log(`New update version ${data[0].tag_name}! Run "amdhelper -u" to update.`);
+    try {
+        const res = await fetch(process.env.RELEASE_URL);
+        const data : UpdateResponse[] = await res.json();
+        if(data[0].tag_name === process.env.VERSION) return;
+        console.log(`New update version ${data[0].tag_name}! Run "amdhelper -u" to update.`);
+    } catch {
+        console.log("Can't check AMDHelper update...")
+    }
 }
 
 export async function update(){
