@@ -20,7 +20,7 @@ export default class Ryzenadj {
             `curl -sL https://github.com/alvindimas05/AMDHelper/raw/refs/heads/main/ryzenadj -o ${ryzenadjPath}`
         );
         await exec(`xattr -c ${ryzenadjPath}`);
-        await exec(`chmod 644 ${ryzenadjPath}`);
+        await exec(`chmod 755 ${ryzenadjPath}`);
         await exec(`chown 0:0 ${ryzenadjPath}`);
         fs.writeFileSync(plistPath, plist);
         await exec(`xattr -c ${plistPath}`);
