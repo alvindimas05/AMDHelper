@@ -11,50 +11,13 @@ import {
 } from "@src/scripts/chromium";
 import {escapePathSpaces, exec} from "@src/utils";
 
-interface ChromiumConfig {
-    browser?: {
-        enabled_labs_experiments: string[]
-    }
-}
-
 const chromiumBrowsers = ["Chromium", "Google Chrome", "Arc", "Microsoft Edge", "Brave Browser"];
 export const bashPath = path.join("/", "Library", "amdhelper", amdhelperChromiumBashName);
 export const plistPath = path.join("/", "Library", "LaunchAgents", amdhelperChromiumPlistName);
 
 export default class Chromium extends AppPatch {
-    configPath: string | null = null;
-    // patchValue = "use-angle@1";
-    oldPatchValues = ["enable-gpu-rasterization@1", "enable-gpu-rasterization@2"];
-    config: ChromiumConfig;
     constructor(appPath: string) {
         super(appPath);
-
-        this.setConfigPath();
-    }
-    setConfigPath(){
-        const basePath = path.join(os.homedir(), "Library/Application Support")
-        if(this.appName == "Google Chrome"){
-            this.configPath = path.join(basePath, "Google/Chrome/Local State");
-            this.setConfig();
-            return;
-        }
-
-        this.configPath = path.join(basePath, this.appName, "Local State");
-        if(fs.existsSync(this.configPath!)) {
-            this.setConfig();
-            return;
-        }
-
-        this.configPath = path.join(basePath, this.appName, "User Data/Local State");
-        if(fs.existsSync(this.configPath!)) {
-            this.setConfig();
-            return;
-        }
-        this.configPath = null;
-
-    }
-    setConfig(){
-        this.config = JSON.parse(fs.readFileSync(this.configPath).toString("utf8"));
     }
     supported() {
         return chromiumBrowsers.includes(this.appName) || this.isChromiumBrowser() || this.supportElectron();
@@ -99,15 +62,6 @@ export default class Chromium extends AppPatch {
         return (this.config !== undefined && this.config.browser !== undefined &&
             this.config.browser.enabled_labs_experiments !== undefined &&
             this.config.browser.enabled_labs_experiments.some(value => this.oldPatchValues.includes(value)))
-    }
-    removeOldPatch(){
-        if (!this.isOldPatch()) return;
-        if(this.config.browser === undefined) return;
-        if(this.config.browser.enabled_labs_experiments === undefined) return;
-        this.config.browser!.enabled_labs_experiments =
-            this.config.browser!.enabled_labs_experiments.filter(val => !this.oldPatchValues.includes(val));
-        this.save();
-        console.log(`Removing old patch from ${this.appName}!`)
     }
 }
 
