@@ -34,7 +34,7 @@ export default class CommandLine {
         console.log(`(C) ${global.commandlineChromiumMode ? "Exit" : "Enter"} Chromium apps mode (${chalk.rgb(255,99,71)("EXPERIMENTAL")})`)
         
         const ryzenadj = new Ryzenadj();
-        console.log(`(O) ${ryzenadj.enabled() ? "Remove" : "Apply"} battery optimization (${chalk.rgb(255,99,71)("May cause lag and REQUIRES PASSWORD")})`)
+        console.log(`(O) ${ryzenadj.enabled() ? "Remove" : "Apply"} battery optimization (${chalk.rgb(255,99,71)("May cause lags")})`)
         
         console.log("(Q) Quit")
 
