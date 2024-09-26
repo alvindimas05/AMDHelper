@@ -12,7 +12,12 @@ export default class Ryzenadj {
     }
     async apply(){
         // @ts-ignore
-        const answers = await inquirer.prompt([{ type: "input", name: "password", message: "Enter Password: " }]);
+        const answers = await inquirer.prompt([{ 
+            type: "password", // setting this as input, makes the console treat it as plain text.
+            name: "password", 
+            message: "Enter Password: ", 
+            mask: '*'  // optional, you can use '*' or another character to mask the input. otherwise, comment this out for invisible entry.
+        }]);
 
         await this.installRyzenadj();
         

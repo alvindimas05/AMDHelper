@@ -29,6 +29,7 @@ You want to change the code and build it manually? Here are the steps
 1. Install Node.js 18.19.0 using [nvm](https://github.com/nvm-sh/nvm?tab=readme-ov-file#install--update-script)
 (The version needs to be specific due to [nexe](https://github.com/nexe/nexe) Node.js version)
 2. Install [bun](https://bun.sh/) runtime
+3. Install dependencies with ``npm install``
 3. Run ```bun run build```
 4. Your build should be ready at ```build/amdhelper```
 
