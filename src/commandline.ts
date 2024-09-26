@@ -8,6 +8,7 @@ import {PatchType} from "@src/types";
 import Chromium, { bashPath, patchChromiumApps, removePatchChromiumApps } from "./patches/chromium";
 import { exec } from "./utils";
 import child_process from "child_process";
+import Ryzenadj from "./scripts/ryzenadj";
 
 export default class CommandLine {
     basePath = "/Applications/";
@@ -31,6 +32,10 @@ export default class CommandLine {
             console.log("(A) Patch all apps")
         }
         console.log(`(C) ${global.commandlineChromiumMode ? "Exit" : "Enter"} Chromium apps mode (${chalk.rgb(255,99,71)("EXPERIMENTAL")})`)
+        
+        const ryzenadj = new Ryzenadj();
+        console.log(`(O) ${ryzenadj.enabled() ? "Remove" : "Apply"} battery optimization (${chalk.rgb(255,99,71)("REQUIRES PASSWORD")})`)
+        
         console.log("(Q) Quit")
 
         // @ts-ignore
@@ -72,6 +77,11 @@ export default class CommandLine {
                     child_process.spawn("bash", [bashPath], { stdio: "ignore", detached: true }).unref();
                     break;
                 }
+            case "o":
+                const ryzenadj = new Ryzenadj();
+                if (ryzenadj.enabled()) ryzenadj.remove();
+                else await ryzenadj.apply();
+                break;
             case "r":
                 if(global.commandlineChromiumMode){
                     removePatchChromiumApps();

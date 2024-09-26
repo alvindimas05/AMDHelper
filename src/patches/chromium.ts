@@ -10,7 +10,6 @@ import {
     amdhelperChromiumPlistName
 } from "@src/scripts/chromium";
 import {escapePathSpaces, exec} from "@src/utils";
-import child_process from "child_process";
 
 interface ChromiumConfig {
     browser?: {
