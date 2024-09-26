@@ -41,3 +41,4 @@ to patch apps that uses Intel MKL libraries.
 to automatically patch apps that uses Intel MKL libraries.
 - [gmatht](https://github.com/gmatht) for script code [gz99](https://github.com/gmatht/joshell/blob/master/scripts/gz99)
 script for better compression.
+- [FlyGoat](https://github.com/FlyGoat) for developing [RyzenAdj](https://github.com/FlyGoat/RyzenAdj) to add power management feature.
