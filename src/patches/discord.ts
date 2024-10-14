@@ -25,12 +25,8 @@ export default class Discord extends AppPatch {
         }
     }
     patched() {
-        try {
-            const fileExists = fs.existsSync(this.patchedPath);
-            return (fileExists ? PatchType.PATCHED : PatchType.UNPATCHED);
-        } catch {
-            return PatchType.UNPATCHED;
-        }
+        const fileExists = fs.existsSync(this.patchedPath);
+        return (fileExists ? PatchType.PATCHED : PatchType.UNPATCHED);
     }
     supported(): boolean {
         return this.appName === this.originalAppName;
@@ -41,6 +37,7 @@ export default class Discord extends AppPatch {
         if(!fs.existsSync(discordPath)) return this.missingData();
         await patchFile(this.krispPath, patchOptions);
 
+        fs.mkdirSync(path.join(this.patchedPath, ".."), { recursive: true });
         fs.writeFileSync(this.patchedPath, "");
     }
 }
