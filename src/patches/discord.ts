@@ -25,8 +25,12 @@ export default class Discord extends AppPatch {
         }
     }
     patched() {
-        const fileExists = fs.existsSync(this.patchedPath);
-        return (fileExists ? PatchType.PATCHED : PatchType.UNPATCHED);
+        try {
+            const fileExists = fs.existsSync(this.patchedPath);
+            return (fileExists ? PatchType.PATCHED : PatchType.UNPATCHED);
+        } catch {
+            return PatchType.UNPATCHED;
+        }
     }
     supported(): boolean {
         return this.appName === this.originalAppName;
