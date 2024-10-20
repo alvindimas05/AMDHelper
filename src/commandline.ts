@@ -145,16 +145,18 @@ export default class CommandLine {
         const files = fs.readdirSync(dir);
 
         for (const file of files) {
-            const filePath = path.join(dir, file);
-            const stats = fs.statSync(filePath);
-
-            if (stats.isDirectory() && !filePath.endsWith('.app')) {
-                this.getApps(filePath);
-            } else if (filePath.endsWith('.app')) {
-                const app = new App(filePath);
-                if(!app.supported()) continue;
-                this.supportedApps.push(new App(filePath));
-            }
+            try {
+                const filePath = path.join(dir, file);
+                const stats = fs.statSync(filePath);
+    
+                if (stats.isDirectory() && !filePath.endsWith('.app')) {
+                    this.getApps(filePath);
+                } else if (filePath.endsWith('.app')) {
+                    const app = new App(filePath);
+                    if(!app.supported()) continue;
+                    this.supportedApps.push(new App(filePath));
+                }
+            } catch {}
         }
     }
 }
