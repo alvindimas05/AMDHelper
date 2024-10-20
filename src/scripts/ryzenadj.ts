@@ -17,7 +17,7 @@ export default class Ryzenadj {
 
         await exec(`mkdir -p ${localBinPath}`);
         await exec(
-            `curl -sL https://github.com/alvindimas05/AMDHelp/raw/refs/heads/main/ryzenadj -o ${ryzenadjPath}`
+            `curl -sL https://github.com/alvindimas05/AMDHelper/raw/refs/heads/main/ryzenadj -o ${ryzenadjPath}`
         );
         await exec(`xattr -c ${ryzenadjPath}`);
         await exec(`chmod 755 ${ryzenadjPath}`);

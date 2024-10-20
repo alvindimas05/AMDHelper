@@ -15,7 +15,7 @@ Unfortunately, this is a temporary workaround, and we must wait for [NootedRed](
 
 Install (or update) AMDHelper on your system 
 ```
-curl -sL https://raw.githubusercontent.com/alvindimas05/AMDHelp/main/install.sh | bash
+curl -sL https://raw.githubusercontent.com/alvindimas05/AMDHelper/main/install.sh | bash
 ```
 
 Run AMDHelper (Please run as sudo)

@@ -1,5 +1,5 @@
 echo "Installing AMDHelper..."
-curl -sSL https://github.com/alvindimas05/AMDHelp/releases/latest/download/amdhelper.gz -o amdhelper.gz
+curl -sSL https://github.com/alvindimas05/AMDHelper/releases/latest/download/amdhelper.gz -o amdhelper.gz
 tar -xvzf amdhelper.gz
 rm amdhelper.gz
 chmod +x amdhelper
